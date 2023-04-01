@@ -5,6 +5,7 @@ import Finalproject.entity.Course;
 import Finalproject.entity.Role;
 import Finalproject.entity.User;
 import Finalproject.exception.course.CourseNotFoundException;
+import Finalproject.exception.role.RoleNotFoundException;
 import Finalproject.repository.CourseRepository;
 import Finalproject.repository.RoleRepository;
 import Finalproject.repository.UserRepository;
@@ -60,21 +61,24 @@ public class UserServiceImplement implements UserService {
         user.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
         user.setPhoneNumber(userCreateDto.getPhoneNumber());
         user.setCreatedOn(LocalDate.now());
-        Role role = roleRepository.findByName("ROLE_ADMIN");
-        if (role == null) {
-            role = checkRoleExist();
-        }
+        //every user is created with USER role the role
+        Role role = roleRepository.findByName("ROLE_USER")
+                .orElseThrow(() -> new RoleNotFoundException("Role with not found!"));
+//        if (role == null) {
+//            role = checkRoleExist();
+//        }
         user.setRoles(Arrays.asList(role));
         userRepository.save(user);
     }
 
-    @Transactional
-    public Role checkRoleExist() {
-        // in mod normal aceasta metoda trebuie sa verifice un rol deja existent in baza de date! Eu il adaug pentru simplitate, chiar daca nu exista!
-        Role role = new Role();
-        role.setName("ROLE_ADMIN");
-        return roleRepository.save(role);
-    }
+// DO NOT USE IT IS CHANGED HERE
+//    @Transactional
+//    public Role checkRoleExist() {
+//        // in mod normal aceasta metoda trebuie sa verifice un rol deja existent in baza de date! Eu il adaug pentru simplitate, chiar daca nu exista!
+//        Role role = new Role();
+//        role.setName("ROLE_ADMIN");
+//        return roleRepository.save(role);
+//    }
 
     @Override
     public List<UserInfoDto> getAllUsers() {

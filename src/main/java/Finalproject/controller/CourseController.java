@@ -2,6 +2,7 @@ package Finalproject.controller;
 
 import Finalproject.dto.CourseCreateDto;
 import Finalproject.dto.CourseInfoDto;
+import Finalproject.entity.Course;
 import Finalproject.service.CourseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,9 @@ public class CourseController {
 
     @PostMapping("/create")
     public ResponseEntity<CourseInfoDto> createCourse(@RequestBody @Valid CourseCreateDto courseCreateDto) {
+        //Here we don't make any checks because a course can have same name but different authors but in this app we didn't impl the logic for this
         CourseInfoDto courseInfoDto = courseService.createCourse(courseCreateDto);
         return ResponseEntity.ok(courseInfoDto);
-        
     }
 
     @GetMapping("/getAllCourses")
